@@ -10,6 +10,10 @@ def cross(rows, cols):
 
 
 def grid_values(s):
+    return {i: s[j] for j, i in enumerate(cross(rows, cols))}
+
+
+def grid_values_with_eliminate(s):
     d = {i: s[j] for j, i in enumerate(cross(rows, cols))}
     for i in d:
         available = [1, 2, 3, 4, 5, 6, 7, 8, 9]
