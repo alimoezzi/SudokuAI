@@ -18,5 +18,5 @@ square_units = [cross(rs, rc) for rs in ('ABC', 'DEF', 'GHI') for rc in ('123', 
 
 if __name__ == '__main__':
     boxes = cross(rows, cols)
-    display(grid_values(grid))
+    display(grid_values(grid), rows, cols, boxes)
     print(boxes)
