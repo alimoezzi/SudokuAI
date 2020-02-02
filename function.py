@@ -1,4 +1,5 @@
 from utils import display
+
 rows = 'ABCDEFGHI'
 cols = '123456789'
 grid = '..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.3..'
@@ -9,7 +10,18 @@ def cross(rows, cols):
 
 
 def grid_values(s):
-    return {i: s[j] for j, i in enumerate(cross(rows, cols))}
+    d = {i: s[j] for j, i in enumerate(cross(rows, cols))}
+    for i in d:
+        available = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        if d[i] == '.':
+            r = row_units[ord(i[0]) - 65]
+            c = column_units[int(i[1]) - 1]
+            s = [j for j in square_units if i in j][0]
+            for k in r + c + s:
+                if d[k].isnumeric() and len(d[k]) == 1:
+                    available[int(d[k]) - 1] = -1
+            d[i] = ''.join([str(z) for z in available if z != -1])
+    return d
 
 
 row_units = [cross(r, cols) for r in rows]
