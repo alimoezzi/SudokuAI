@@ -15,9 +15,9 @@ def grid_values(s):
 
 def grid_values_with_eliminate(*args):
     if len(args) == 1:
-        if args[0] is str:
+        if isinstance(args[0], str):
             d = {i: args[0][j] for j, i in enumerate(cross(rows, cols))}
-        elif args[0] is dict:
+        elif isinstance(args[0], dict):
             d = args[0]
         else:
             raise Exception(f'Invalid type of input {type(args[0])}')
@@ -30,7 +30,7 @@ def grid_values_with_eliminate(*args):
         elif d[i].isnumeric() and len(d[i]) == 1:
             continue
         else:
-            available = [-1 if str(i) not in d[i] else i for i in range(1, 10)]
+            available = [-1 if str(z) not in d[i] else z for z in range(1, 10)]
         r = row_units[ord(i[0]) - 65]
         c = column_units[int(i[1]) - 1]
         s = [j for j in square_units if i in j][0]
@@ -43,9 +43,9 @@ def grid_values_with_eliminate(*args):
 
 def grid_values_with_eliminate_only_choice(*args):
     if len(args) == 1:
-        if args[0] is str:
+        if isinstance(args[0], str):
             d = {i: args[0][j] for j, i in enumerate(cross(rows, cols))}
-        elif args[0] is dict:
+        elif isinstance(args[0], dict):
             d = args[0]
         else:
             raise Exception(f'Invalid type of input {type(args[0])}')
@@ -57,7 +57,7 @@ def grid_values_with_eliminate_only_choice(*args):
         elif d[i].isnumeric() and len(d[i]) == 1:
             continue
         else:
-            available = [-1 if str(i) not in d[i] else i for i in range(1, 10)]
+            available = [-1 if str(z) not in d[i] else z for z in range(1, 10)]
         r = row_units[ord(i[0]) - 65]
         c = column_units[int(i[1]) - 1]
         s = [j for j in square_units if i in j][0]
@@ -81,6 +81,22 @@ def grid_values_with_eliminate_only_choice(*args):
     return d
 
 
+def reduce_puzzle(values):
+    one_in_two = False
+    l = 0
+    i = grid_values_with_eliminate(values)
+    j = grid_values_with_eliminate_only_choice(i)
+    while l != len(j.values()):
+        i = grid_values_with_eliminate(j)
+        j = grid_values_with_eliminate_only_choice(i)
+        if one_in_two is True:
+            l = len(j.values())
+            one_in_two = False
+        else:
+            one_in_two = True
+    return j
+
+
 row_units = [cross(r, cols) for r in rows]
 column_units = [cross(rows, c) for c in cols]
 square_units = [cross(rs, rc) for rs in ('ABC', 'DEF', 'GHI') for rc in ('123', '456', '789')]
@@ -88,4 +104,6 @@ square_units = [cross(rs, rc) for rs in ('ABC', 'DEF', 'GHI') for rc in ('123', 
 if __name__ == '__main__':
     boxes = cross(rows, cols)
     display(grid_values_with_eliminate_only_choice(grid), rows, cols, boxes)
+    print('**')
+    display(reduce_puzzle(grid), rows, cols, boxes)
     print(boxes)
