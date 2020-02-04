@@ -13,33 +13,58 @@ def grid_values(s):
     return {i: s[j] for j, i in enumerate(cross(rows, cols))}
 
 
-def grid_values_with_eliminate(s):
-    d = {i: s[j] for j, i in enumerate(cross(rows, cols))}
+def grid_values_with_eliminate(*args):
+    if len(args) == 1:
+        if args[0] is str:
+            d = {i: args[0][j] for j, i in enumerate(cross(rows, cols))}
+        elif args[0] is dict:
+            d = args[0]
+        else:
+            raise Exception(f'Invalid type of input {type(args[0])}')
+    else:
+        raise Exception(f'Invalid number of args {len(args)}')
     for i in d:
         available = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         if d[i] == '.':
-            r = row_units[ord(i[0]) - 65]
-            c = column_units[int(i[1]) - 1]
-            s = [j for j in square_units if i in j][0]
-            for k in r + c + s:
-                if d[k].isnumeric() and len(d[k]) == 1:
-                    available[int(d[k]) - 1] = -1
-            d[i] = ''.join([str(z) for z in available if z != -1])
+            available = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        elif d[i].isnumeric() and len(d[i]) == 1:
+            continue
+        else:
+            available = [-1 if str(i) not in d[i] else i for i in range(1, 10)]
+        r = row_units[ord(i[0]) - 65]
+        c = column_units[int(i[1]) - 1]
+        s = [j for j in square_units if i in j][0]
+        for k in r + c + s:
+            if d[k].isnumeric() and len(d[k]) == 1:
+                available[int(d[k]) - 1] = -1
+        d[i] = ''.join([str(z) for z in available if z != -1])
     return d
 
 
-def grid_values_with_eliminate_only_choice(s):
-    d = {i: s[j] for j, i in enumerate(cross(rows, cols))}
+def grid_values_with_eliminate_only_choice(*args):
+    if len(args) == 1:
+        if args[0] is str:
+            d = {i: args[0][j] for j, i in enumerate(cross(rows, cols))}
+        elif args[0] is dict:
+            d = args[0]
+        else:
+            raise Exception(f'Invalid type of input {type(args[0])}')
+    else:
+        raise Exception(f'Invalid number of args {len(args)}')
     for i in d:
-        available = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         if d[i] == '.':
-            r = row_units[ord(i[0]) - 65]
-            c = column_units[int(i[1]) - 1]
-            s = [j for j in square_units if i in j][0]
-            for k in r + c + s:
-                if d[k].isnumeric() and len(d[k]) == 1:
-                    available[int(d[k]) - 1] = -1
-            d[i] = ''.join([str(z) for z in available if z != -1])
+            available = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        elif d[i].isnumeric() and len(d[i]) == 1:
+            continue
+        else:
+            available = [-1 if str(i) not in d[i] else i for i in range(1, 10)]
+        r = row_units[ord(i[0]) - 65]
+        c = column_units[int(i[1]) - 1]
+        s = [j for j in square_units if i in j][0]
+        for k in r + c + s:
+            if d[k].isnumeric() and len(d[k]) == 1:
+                available[int(d[k]) - 1] = -1
+        d[i] = ''.join([str(z) for z in available if z != -1])
     for i in d:
         cnt = {i: 0 for i in range(1, 10)}
         if len(d[i]) > 1:
