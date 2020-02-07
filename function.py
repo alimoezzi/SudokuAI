@@ -1,7 +1,3 @@
-from copy import deepcopy
-
-from docutils.nodes import copyright
-
 from utils import display
 
 rows = 'ABCDEFGHI'
