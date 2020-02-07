@@ -1,8 +1,13 @@
+from copy import deepcopy
+
+from docutils.nodes import copyright
+
 from utils import display
 
 rows = 'ABCDEFGHI'
 cols = '123456789'
 grid = '..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.3..'
+grid2 = '4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......'
 
 
 def cross(rows, cols):
@@ -97,13 +102,31 @@ def reduce_puzzle(values):
     return j
 
 
+def search(values):
+    j: dict = reduce_puzzle(values)
+    for c in j.values():
+        if len(c) == 0:
+            return
+    if all(len(e) == 1 for e in j.values()):
+        return j
+    min_key = min(j.keys(), key=lambda x: len(j[x]) if len(j[x]) != 1 else 10)
+    for m in j[min_key]:
+        a = j.copy()
+        a[min_key] = m
+        r = search(a)
+        if r:
+            return r
+
+
 row_units = [cross(r, cols) for r in rows]
 column_units = [cross(rows, c) for c in cols]
 square_units = [cross(rs, rc) for rs in ('ABC', 'DEF', 'GHI') for rc in ('123', '456', '789')]
 
 if __name__ == '__main__':
     boxes = cross(rows, cols)
-    display(grid_values_with_eliminate_only_choice(grid), rows, cols, boxes)
+    display(grid_values_with_eliminate_only_choice(grid2), rows, cols, boxes)
     print('**')
-    display(reduce_puzzle(grid), rows, cols, boxes)
+    display(reduce_puzzle(grid2), rows, cols, boxes)
+    print('**')
+    display(search(grid2), rows, cols, boxes)
     print(boxes)
